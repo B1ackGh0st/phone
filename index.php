@@ -7,6 +7,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
     <style>
      body{
        font-size: 14px;
@@ -188,7 +189,7 @@
               </div>
             </div>
             <div class="card">
-              <ul class="nav nav-tabs" id="objectTabs" role="tablist">
+              <ul class="nav" id="objectLinks">
 
               </ul>
               <div class="card-body" id="subscriberList">

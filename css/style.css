@@ -1,3 +1,19 @@
 .remove-subscriber  {
   cursor: pointer;
 }
+
+.subscriberPositionUp {
+    cursor: pointer;
+}
+
+.subscriberPositionDown {
+    cursor: pointer;
+}
+
+.objectPositionUp {
+    cursor: pointer;
+}
+
+.objectPositionDown {
+    cursor: pointer;
+}

@@ -31,9 +31,8 @@ function objectLinks(){
 };
 
 $(document).ready(function() {
-  subscriberList();
   objectLinks();
-
+  objectList()
   $("#object_add_btn").click(
   function(){
     sendAjaxForm('result', 'object_add', 'object_add.php');
@@ -101,8 +100,88 @@ function delSubscriber(id, url) {
   });
 }
 
+// Перемещение позиции абонента ввверх
+$(document).on("click", ".subscriberPositionUp", function(e) {
+    var id =$(this).attr('id');
+    subscriberPositionUp(id);
+    return false;
+});
+
+// Перемещение позиции абонента вниз
+$(document).on("click", ".subscriberPositionDown", function(e) {
+    var id =$(this).attr('id');
+    subscriberPositionDown(id);
+    return false;
+});
+
+// Перемещение позиции абонента ввверх
+$(document).on("click", ".objectPositionUp", function(e) {
+    var id =$(this).attr('id');
+    objectPositionUp(id);
+    return false;
+});
+
+// Перемещение позиции абонента вниз
+$(document).on("click", ".objectPositionDown", function(e) {
+    var id =$(this).attr('id');
+    objectPositionDown(id);
+    return false;
+})
+
+function subscriberPositionUp(id) {
+    $.ajax({
+        url:     'ajax.subscriberPositionEddit.php', //url страницы (action_ajax_form.php)
+        type:     "POST", //метод отправки
+        data: 'subscriberPositionUp=' + id,  // Сеарилизуем объект
+        dataType: 'json',
+        success: function(data) { //Данные отправлены успешно
+          subscriberList(data.object_id);
+      },
+      error: function(response) { // Данные не отправлены
+            $('#result').html('Ошибка. Данные не отправлены.');
+      }
+  });
+}
+
+function subscriberPositionDown(id) {
+    $.ajax({
+        url:     'ajax.subscriberPositionEddit.php', //url страницы (action_ajax_form.php)
+        type:     "POST", //метод отправки
+        data: 'subscriberPositionDown=' + id,  // Сеарилизуем объект
+        dataType: 'json',
+        success: function(data) { //Данные отправлены успешно
+          subscriberList(data.object_id);
+      },
+      error: function(response) { // Данные не отправлены
+            $('#result').html('Ошибка. Данные не отправлены.');
+      }
+  });
+}
+
+function objectPositionUp(id) {
+    $.ajax({
+        url:     'ajax.objectPositionEddit.php', //url страницы (action_ajax_form.php)
+        type:     "POST", //метод отправки
+        data: 'objectPositionUp=' + id,  // Сеарилизуем объект
+        success: function(data) { //Данные отправлены успешно
+          objectList();
+      },
+  });
+}
+
+function objectPositionDown(id) {
+    $.ajax({
+        url:     'ajax.objectPositionEddit.php', //url страницы (action_ajax_form.php)
+        type:     "POST", //метод отправки
+        data: 'objectPositionDown=' + id,  // Сеарилизуем объект
+        success: function(data) { //Данные отправлены успешно
+          objectList();
+      },
+  });
+}
+
 function subscriberList(id) {
-  $('#subscriberList').empty();
+  //$('#subscriberList').empty();
   $.ajax({
     type: "POST",
     url: "/ajax.subscriberList.php",
@@ -114,11 +193,25 @@ function subscriberList(id) {
   });
 };
 
+function objectList() {
+  //$('#subscriberList').empty();
+  $.ajax({
+    type: "POST",
+    url: "/ajax.objectList.php",
+    cache: false,
+    success: function(responce) {
+      $('#objectList').html(responce);
+    }
+  });
+};
+
 $(document).on("click", ".objectLink", function(e) {
     var id =$(this).attr('id');
     subscriberList(id);
     return false;
 });
+
+
 /*
  *  Связные списки
  */

@@ -10,8 +10,9 @@ if (isset($_POST["object_add_name"])) {
   $connection = pg_connect("host=127.0.0.1 port=5432 dbname=phone user=postgres password=postgres");
 
   $name = $_POST['object_add_name'];
+  $position = $_POST['position'];
 
-  $query = "INSERT INTO object (name) VALUES ('$name')";
+  $query = "INSERT INTO object (name, position) VALUES ('$name', '$position')";
 
   pg_query($connection, $query);
 

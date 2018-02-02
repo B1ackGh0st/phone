@@ -11,8 +11,8 @@ if (isset($_POST["subdivision_add_name"])) {
 
   $name = $_POST['subdivision_add_name'];
   $object_id = $_POST['object_id'];
-
-  $query = "INSERT INTO subdivision (name, object_id) VALUES ('$name', '$object_id')";
+  $position = $_POST['position'];
+  $query = "INSERT INTO subdivision (name, object_id, position) VALUES ('$name', '$object_id', '$position')";
 
   pg_query($connection, $query);
 

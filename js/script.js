@@ -1,22 +1,140 @@
 /*
- *  Связные списки
+ *  Табы
  */
 
-function selectSubdivision(){
-  var object_id = $('select[name="object"]').val();
-  if(!id_country) {
-    $('div[name="selectDataObject"]').html('');
-    $('div[name="selectDataSubscriber"]').html('');
-  } else {
+// Объекты
+$(document).on("click", ".objectTab", function(e) {
+    objectTab();
+    return false;
+});
+
+function objectTab(){
+  //$('#object').empty();
   $.ajax({
     type: "POST",
-    url: "ajax.php",
-    data: { action: 'showRegionForInsert', id_country: id_country },
+    url: "/action/object.php",
     cache: false,
-    success: function(responce){ $('div[name="selectDataRegion"]').html(responce); }
+    success: function(responce) {
+      $('#object').html(responce);
+    }
   });
+};
+
+// END Объекты
+
+
+// Подкатегории
+$(document).on("click", ".subdivisionTab", function(e) {
+    subdivisionTab();
+    return false;
+});
+// END Подкатегории
+
+
+// Абоненты
+$(document).on("click", ".subscriberTab", function(e) {
+    subscriberTab();
+    return false;
+});
+// END Абоненты
+
+
+/*
+ * END Табы
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ *  Связные списки
+ */
+function selectSubdivision(){
+  var object_id = $('select[name="selectObject_id"]').val();
+  if(!object_id){
+    $('div[name="selectSubdivision"]').html('');
+  }else{
+    $.ajax({
+      type: "POST",
+      url: "ajax.php",
+      data: {
+        action: 'showSubdivision', object_id: object_id
+      },
+      cache: false,
+      success: function(responce){ $('div[name="selectSubdivision"]').html(responce); }
+    });
   };
 };
+
+/*
+ *  Подразделения
+ */
+function objectLinkSubdivision(){
+  $('#objectLinkSubdivision').empty();
+  $.ajax({
+    type: "POST",
+    url: "/ajax.objectLinkSubdivision.php",
+    cache: false,
+    success: function(responce) {
+      $('#objectLinkSubdivision').html(responce);
+    }
+  });
+};
+
+$(document).on("click", ".subdivisionList", function(e) {
+    var id =$(this).attr('id');
+    subdivisionList(id);
+    return false;
+});
+
+function subdivisionList(id) {
+  //$('#subscriberList').empty();
+  $.ajax({
+    type: "POST",
+    url: "/ajax.subdivisionList.php",
+    data: 'id=' + id,  // Сеарилизуем объект
+    cache: false,
+    success: function(responce) {
+      $('#subdivisionList').html(responce);
+    }
+  });
+};
+
+/*
+ *  // Подразделения
+ */
 
 function objectLinks(){
   $('#objectLinks').empty();
@@ -26,38 +144,28 @@ function objectLinks(){
     cache: false,
     success: function(responce) {
       $('#objectLinks').html(responce);
+      $('#objectList0').html(responce);
     }
   });
 };
 
-$(document).ready(function() {
-  objectLinks();
-  objectList()
-  $("#object_add_btn").click(
-  function(){
-    sendAjaxForm('result', 'object_add', 'object_add.php');
-    return false;
-  }
-);
-
-  $("#subdivision_add_btn").click(
-  function(){
-    sendAjaxForm('result', 'object_add', 'object_add.php');
-    return false;
-  }
-);
-
-$("#subscriber_add_btn").click(
-  function() {
-    sendAjaxForm('result', 'subscriber_add', 'subscriber_add.php');
-    setTimeout(function () {
-      subscriberList();
-    },1000);
-    return false;
-  }
-);
-
+$(document).on("click", ".objectLink", function(e) {
+   var id =$(this).attr('id');
+   subscriberList(id);
+   return false;
 });
+
+function objectList() {
+  //$('#subscriberList').empty();
+  $.ajax({
+    type: "POST",
+    url: "/ajax.objectList.php",
+    cache: false,
+    success: function(responce) {
+      $('#objectList').html(responce);
+    }
+  });
+};
 
 function sendAjaxForm(result, ajax_form, url) {
     $.ajax({
@@ -76,9 +184,11 @@ function sendAjaxForm(result, ajax_form, url) {
   });
 }
 
+/*
+ * Удаление абонента
+ */
 $(document).on("click", ".remove-subscriber", function(e) {
-  if(confirm("Вы уверенны что хотите удалить этого пользователя ?") == true)
-  {
+  if(confirm("Вы уверенны что хотите удалить этого пользователя ?") == true)  {
     var id =$(this).attr('id');
     delSubscriber(id, 'delSubscriberList.php');
     return false;
@@ -99,8 +209,68 @@ function delSubscriber(id, url) {
       }
   });
 }
+/*
+ * // Удаление аббонента
+ */
 
-// Перемещение позиции абонента ввверх
+/*
+ * Удаление объекта
+ */
+$(document).on("click", ".remove-object", function(e) {
+ if(confirm("Вы уверенны что хотите удалить этот объект ?") == true)  {
+   var id =$(this).attr('id');
+   delSubscriber(id, 'delObjectList.php');
+   return false;
+ }
+});
+
+function delObject(id, url) {
+   $.ajax({
+       url:     url, //url страницы (action_ajax_form.php)
+       type:     "POST", //метод отправки
+       data: 'id=' + id,  // Сеарилизуем объект
+       success: function(response) { //Данные отправлены успешно
+         $('#result').html(result);
+         $('tr#row-' + id).remove(); // строка имеет id вида "row-17"
+     },
+     error: function(response) { // Данные не отправлены
+       $('#result').html('Ошибка. Данные не отправлены.');
+     }
+ });
+}
+/*
+ * // Удаление объекта
+ */
+
+/*
+ * Удаление подкатегории
+ */
+ $(document).on("click", ".remove-subdivision", function(e) {
+  if(confirm("Вы уверенны что хотите удалить этот объект ?") == true)  {
+    var id =$(this).attr('id');
+    delSubscriber(id, 'delSubdivisionList.php');
+    return false;
+  }
+ });
+
+ function delSubdivision(id, url) {
+    $.ajax({
+        url:     url, //url страницы (action_ajax_form.php)
+        type:     "POST", //метод отправки
+        data: 'id=' + id,  // Сеарилизуем объект
+        success: function(response) { //Данные отправлены успешно
+          $('#result').html(result);
+          $('tr#row-' + id).remove(); // строка имеет id вида "row-17"
+      },
+      error: function(response) { // Данные не отправлены
+        $('#result').html('Ошибка. Данные не отправлены.');
+      }
+  });
+ }
+/*
+ * Удаление подкатегории
+ */
+
 $(document).on("click", ".subscriberPositionUp", function(e) {
     var id =$(this).attr('id');
     subscriberPositionUp(id);
@@ -193,42 +363,38 @@ function subscriberList(id) {
   });
 };
 
-function objectList() {
-  //$('#subscriberList').empty();
-  $.ajax({
-    type: "POST",
-    url: "/ajax.objectList.php",
-    cache: false,
-    success: function(responce) {
-      $('#objectList').html(responce);
-    }
-  });
-};
 
-$(document).on("click", ".objectLink", function(e) {
-    var id =$(this).attr('id');
-    subscriberList(id);
+
+
+$(document).ready(function() {
+
+  objectLinks();
+  objectList();
+  objectLinkSubdivision();
+  //subdivisionList(id);
+
+  $("#object_add_btn").click(
+  function(){
+    sendAjaxForm('result', 'object_add', 'object_add.php');
     return false;
+  }
+);
+
+  $("#subdivision_add_btn").click(
+  function(){
+    sendAjaxForm('result', 'object_add', 'object_add.php');
+    return false;
+  }
+);
+
+$("#subscriber_add_btn").click(
+  function() {
+    sendAjaxForm('result', 'subscriber_add', 'subscriber_add.php');
+    setTimeout(function () {
+      subscriberList();
+    },1000);
+    return false;
+  }
+);
+
 });
-
-
-/*
- *  Связные списки
- */
-
-function selectSubdivision(){
-  var object_id = $('select[name="selectObject_id"]').val();
-  if(!object_id){
-    $('div[name="selectSubdivision"]').html('');
-  }else{
-    $.ajax({
-      type: "POST",
-      url: "ajax.php",
-      data: {
-        action: 'showSubdivision', object_id: object_id
-      },
-      cache: false,
-      success: function(responce){ $('div[name="selectSubdivision"]').html(responce); }
-    });
-  };
-};

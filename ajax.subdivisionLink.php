@@ -7,7 +7,7 @@ WHERE subscriber.Object_id = Object.id AND subscriber.object_id = ".$ID." ORDER 
 */
 //$query = "SELECT id, name FROM subscriber WHERE object_id=".$ID." ORDER BY position ASC";
 
-$queryObject = "SELECT id, name, position FROM object ORDER BY position ASC";
+$queryObject = "SELECT id, name, position FROM subdivision ORDER BY position ASC";
 $aObject = pg_query($connection, $queryObject);
 echo '<table class="table table-bordered table-sm">
 <thead>

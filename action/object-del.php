@@ -1,10 +1,24 @@
 <?php
 
-if (isset($_POST["id"])) {
+if (isset($_POST["id"])) $ID = $_POST["id"];
+if (isset($_POST["table"])) $table = $_POST["table"]
 
-  $ID = $_POST["id"];
+if (isset($ID) AND isset($table)) {
 
-  $connection = pg_connect("host=127.0.0.1 port=5432 dbname=phone user=postgres password=postgres");
+$connection = pg_connect("host=127.0.0.1 port=5432 dbname=phone user=postgres password=postgres");
+
+if($table == 'object')  {
+  $objectSql = "SELECT object WHERE id = '".$ID."'";
+  $subdivisionSql = "SELECT subdivision WHERE object_id = '".$ID."'";
+  $subscriberSql = "SELECT subscriber WHERE object_id = '".$ID."'";
+}
+if($table == 'subdivision')  {
+  $subdivisionSql = "SELECT subdivision WHERE id = '".$ID."'";
+  $subscriberSql = "SELECT subscriber WHERE subdivision_id = '".$ID."'"
+}
+if($table == 'subscriber')  {
+  $subscriberSql = "SELECT subscriber WHERE id = '".$ID."'"
+}
 
   $selectSQLsubd = "SELECT subdivision WHERE object_id = '".$ID."'";
 

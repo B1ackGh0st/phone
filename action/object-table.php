@@ -3,6 +3,7 @@ $connection = pg_connect("host=127.0.0.1 port=5432 dbname=phone user=postgres pa
 
 $queryObject = "SELECT id, name, position FROM object ORDER BY position ASC";
 $aObject = pg_query($connection, $queryObject);
+if(pg_fetch_row($aObject)>0){
 echo '    <table class="table table-bordered table-sm">
             <thead>
               <tr>
@@ -30,5 +31,5 @@ while($object = pg_fetch_array($aObject)) {
 }
 echo "      </tbody>
           </table>";
-
+}
 ?>

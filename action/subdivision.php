@@ -34,33 +34,55 @@ echo '        </select>
         </div>
       </div>
       <div class="card">
-        <div class="card-body" id="subdivision-table">';
-$objectSql = "SELECT id, name, position FROM object ORDER BY position ASC";
-$objectQuery = pg_query($connection, $objectSql);
-echo '    <table class="table table-bordered table-sm">
-            <thead>
-              <tr>
-                <th scope="col">
-                  Наименование
-                </th>
-                <th scope="col">
-                </th>
-              </tr>
-            </thead>
-            <tbody>';
-//echo $rowsCount;
-while($object = pg_fetch_array($objectQuery)) {
-echo '        <tr>
-                <td>
-                  ('.$object['position'].') '.$object['name'].'
-                </td>
-                <td>
-                  <img src="img/chevron-top-2x.png" id="'.$object['id'].'" class="objectPositionUp"> <img src="img/chevron-bottom-2x.png" id="'.$object['id'].'" class="objectPositionDown"> <img type="button" src="img/pencil-2x.png" data-toggle="modal" data-target="#exampleModalLong"> <img src="img/trash-2x.png" id="" class="remove-object">
-                </td>
-              </tr>';
-}
-echo "      </tbody>
-          </table>
+        <div class="card-body">';
+
+        $objectSql = 'SELECT id, name FROM object ORDER BY position ASC';
+        $objectQuery = pg_query($connection, $objectSql);
+        if(pg_fetch_row($objectQuery)>0)  {
+              echo '<select id="object">';
+              while($object = pg_fetch_row($objectQuery)) {
+                echo "<option value='".$object[0]."'>".$object[1]."</option>";
+                }
+        }
+        echo '</select>
         </div>
-      </div>";
+      </div>';
+
+
+      echo '    <div class="card">
+              <div class="card-body" id="subdivision-table">';
+        $subdivisionSql = "SELECT id, name, position FROM subdivision WHERE object_id = 0 ORDER BY position ASC";
+        $subdivisionQuery = pg_query($connection, $subdivisionSql);
+        if(pg_fetch_row($subdivisionQuery)>0){
+        echo '<table class="table table-bordered table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          Наименование
+                        </th>
+                        <th scope="col">
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>';
+        //echo $rowsCount;
+        while($subdivision = pg_fetch_array($subdivisionQuery)) {
+          echo '      <tr id=row-'.$subdivision['id'].'>
+                        <td>
+                          ('.$subdivision['position'].') '.$subdivision['name'].'
+                        </td>
+                        <td>
+                          <img src="img/chevron-top-2x.png" id="'.$subdivision['id'].'" class="subdivision-position-up">
+                          <img src="img/chevron-bottom-2x.png" id="'.$subdivision['id'].'" class="subdivision-position-down">
+                          <img type="button" src="img/pencil-2x.png" data-toggle="modal" data-target="#exampleModalLong">
+                          <img src="img/trash-2x.png" id="'.$subdivision['id'].'" class="subdivision-del">
+                        </td>
+                      </tr>';
+        }
+        echo "      </tbody>
+                  </table>";
+        }
+        '</div>
+      </div>';
+
 ?>

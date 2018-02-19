@@ -101,7 +101,8 @@ function subscriber() {
  $(document).on("click", ".object-del", function(e) {
   if(confirm("Вы уверенны что хотите удалить этот объект ?") == true)  {
     var id =$(this).attr('id');
-    delInTable(id, 'object-del.php');
+    var table = 'object';
+    delInTable(id,table, 'object-del.php');
     return false;
   }
  });
@@ -127,7 +128,7 @@ function subscriber() {
 // Вывод таблицы подразделений в Табе "Подразделения"
 $(document).on("click", "#object", function(e) {
   var object_id = $("select#object").val();
-  if(!object_id){
+  if(!object_id || object_id == "nun"){
     $('#subdivision-table').html('');
   }else{
     $.ajax({
@@ -216,7 +217,7 @@ function subscriberTable(id) {
 function selectSubdivision(){
   var object_id = $('select[name="select-object"]').val();
   if(!object_id){
-    $('div[name="selectSubdivision"]').html('');
+    $('div[id="selectSubdivision"]').html('');
   }else{
     $.ajax({
       type: "POST",
@@ -236,9 +237,10 @@ $(document).on("click", "#object-sabdivision", function(e) {
 });
 function selectSubdivisionSabsc(){
   var subdivision_id = $("select#object-sabdivision").val();
-  if(!subdivision_id){
-    $('div[name="subscriber-table"]').html('');
-  }else{
+  if(!subdivision_id || subdivision_id == "nun"){
+    $('div[id="subscriber-table"]').html('');
+  }
+  else{
     $.ajax({
       type: "POST",
       url: "/action/subscriber-table.php",
@@ -284,11 +286,11 @@ function sendForm(result, ajax_form, url) {
 });
 }
 
-function delInTable(id, url) {
+function delInTable(id, table, url) {
  $.ajax({
      url:     '/action/'+url, //url страницы (action_ajax_form.php)
      type:     "POST", //метод отправки
-     data: 'id=' + id,  // Сеарилизуем объект
+     data: 'id=' + id + '&table=' + table,  // Сеарилизуем объект
      success: function(response) { //Данные отправлены успешно
        $('#result').html(result);
        $('tr#row-' + id).remove(); // строка имеет id вида "row-17"

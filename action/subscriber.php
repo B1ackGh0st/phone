@@ -64,7 +64,7 @@ echo'</select>
 
 
   if(pg_fetch_row($objectQuery)>0)  {
-        echo '<select id="object-sabdivision">';
+        echo '<select id="object-sabdivision"><option value="nun">Выбрать...</option>';
         while($object = pg_fetch_row($objectQuery)) {
           echo "<optgroup label='".$object[1]."'>";
 

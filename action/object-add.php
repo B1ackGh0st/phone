@@ -12,12 +12,13 @@ if (isset($_POST["name"])) {
 
   $name = $_POST['name'];
 
-  $objectSelectSql = 'SELECT id FROM object';
+  $objectSelectSql = 'SELECT * FROM object';
   $objectSelectQuery = pg_query($connection, $objectSelectSql);
-  $count = pg_num_rows($objectSelectQuery);
-  $count = $count+1;
+  $count = pg_fetch_row($objectSelectQuery);
 
-  $query = "INSERT INTO object (name, position) VALUES ('$name', '$count')";
+  $countNew = $count[0]+1;
+  echo $countNew;
+  $query = "INSERT INTO object (name, position) VALUES ('$name', '$countNew')";
 
   pg_query($connection, $query);
 /*

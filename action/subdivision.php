@@ -39,7 +39,7 @@ echo '        </select>
         $objectSql = 'SELECT id, name FROM object ORDER BY position ASC';
         $objectQuery = pg_query($connection, $objectSql);
         if(pg_fetch_row($objectQuery)>0)  {
-              echo '<select id="object">';
+              echo '<select id="object"><option value="nun">Выбрать...</option>';
               while($object = pg_fetch_row($objectQuery)) {
                 echo "<option value='".$object[0]."'>".$object[1]."</option>";
                 }
